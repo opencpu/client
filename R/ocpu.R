@@ -58,3 +58,33 @@ ocpu_post_json <- function(path, args = NULL){
   req2 <- ocpu_perform(url_path(req$location, "R", ".val", "json"))
   fromJSON(rawToChar(req2$content))
 }
+
+#' @export
+#' @rdname ocpu
+#' @examples ocpu_post_encoded('/library/stats/R/rnorm', list(n = 5, mean = 3))
+ocpu_post_encoded <- function(path, args = NULL){
+  fields <- names(args)
+  values <- vapply(args, function(x){
+    curl::curl_escape(deparse(x))
+  }, character(1))
+  data <- paste(fields, values, sep = "=", collapse = "&")
+  handle <- new_handle(postfields = data)
+  req <- ocpu(path, handle)
+  bail_if(!length(req$location), "response did not contain a location!")
+  req2 <- ocpu_perform(url_path(req$location, "R", ".val", "rds"))
+  readRDS(gzcon(rawConnection(req2$content)))
+}
+
+#' @export
+#' @rdname ocpu
+#' @examples ocpu_post_multipart('/library/stats/R/rnorm', list(n = 5, mean = 3))
+ocpu_post_multipart <- function(path, args = NULL){
+  values <- lapply(args, function(x){
+    curl::curl_escape(deparse(x))
+  })
+  handle <- handle_setform(new_handle(), .list = values)
+  req <- ocpu(path, handle)
+  bail_if(!length(req$location), "response did not contain a location!")
+  req2 <- ocpu_perform(url_path(req$location, "R", ".val", "rds"))
+  readRDS(gzcon(rawConnection(req2$content)))
+}
