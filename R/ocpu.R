@@ -5,7 +5,7 @@
 #' @name ocpu
 #' @rdname ocpu
 #' @export
-#' @importFrom curl new_handle handle_setheaders curl_fetch_memory parse_headers_list
+#' @importFrom curl new_handle handle_setheaders handle_setform curl_fetch_memory parse_headers_list
 #' @importFrom jsonlite toJSON fromJSON
 #' @importFrom protolite serialize_pb unserialize_pb
 #' @param path target api (without the `/ocpu` part)
