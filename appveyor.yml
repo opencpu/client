@@ -10,6 +10,10 @@ init:
 install:
   ps: Bootstrap
 
+# To build 'jeroen/curl' from Github
+environment:
+  USE_RTOOLS: true
+
 # Adapt as necessary starting from here
 
 build_script:
