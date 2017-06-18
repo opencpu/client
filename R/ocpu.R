@@ -37,7 +37,7 @@ ocpu_perform <- function(url, handle = new_handle(), stop_on_error = TRUE, no_ca
 #' @rdname ocpu
 #' @examples ocpu_post_json('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_json <- function(path, args = NULL){
-  handle <- new_handle(postfields = jsonlite::toJSON(args))
+  handle <- new_handle(copypostfields = jsonlite::toJSON(args))
   handle_setheaders(handle, 'Content-Type' = 'application/json')
   req <- ocpu(path, handle)
   bail_if(!length(req$location), "response did not contain a location!")
@@ -54,7 +54,7 @@ ocpu_post_encoded <- function(path, args = NULL){
     curl::curl_escape(deparse(x))
   }, character(1))
   data <- paste(fields, values, sep = "=", collapse = "&")
-  handle <- new_handle(postfields = data)
+  handle <- new_handle(copypostfields = data)
   req <- ocpu(path, handle)
   bail_if(!length(req$location), "response did not contain a location!")
   req2 <- ocpu_perform(url_path(req$location, "R", ".val", "rds"))
@@ -85,7 +85,7 @@ ocpu_post_multipart <- function(path, args = NULL){
 #' @examples # Note server might send cached responses
 #' ocpu_post_pb('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_pb <- function(path, args = NULL){
-  handle <- new_handle(postfields = protolite::serialize_pb(args))
+  handle <- new_handle(copypostfields = protolite::serialize_pb(args))
   handle_setheaders(handle, 'Content-Type' = 'application/rprotobuf')
   req <- ocpu(path, handle)
   bail_if(!length(req$location), "response did not contain a location!")
