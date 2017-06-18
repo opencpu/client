@@ -13,8 +13,7 @@ matrix:
       env: R_CODECOV=true
     - os: osx
       osx_image: xcode8.3
-      brew_packages: curl --with-nghttp2
-      before_install: brew link --force curl
+      brew_packages: curl --with-nghttp2 && brew link --force curl
     - os: osx
       osx_image: xcode7.3
       disable_homebrew: true
