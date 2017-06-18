@@ -18,7 +18,7 @@ ocpu <- function(path, handle = NULL, server = 'https://cloud.opencpu.org/ocpu')
 }
 
 ocpu_perform <- function(url, handle = new_handle(), stop_on_error = TRUE, no_cache = TRUE){
-  #handle_setopt(handle, .list = ocpu_options())
+  handle <- handle_setopt(handle, .list = ocpu_options())
   req <- curl_fetch_memory(url, handle = handle)
   bail_if(req$status >= 400 && stop_on_error,
           "HTTP %d: %s",req$status, rawToChar(req$content))
@@ -31,20 +31,6 @@ ocpu_perform <- function(url, handle = new_handle(), stop_on_error = TRUE, no_ca
     location = headers$location,
     content = req$content
   )
-}
-
-#' @export
-#' @rdname ocpu
-#' @param args a named list with function arguments, c.f. [do.call()]
-#' @examples # Note server might send cached responses
-#' ocpu_post_pb('/library/stats/R/rnorm', list(n = 5, mean = 3))
-ocpu_post_pb <- function(path, args = NULL){
-  handle <- new_handle(postfields = protolite::serialize_pb(args))
-  handle_setheaders(handle, 'Content-Type' = 'application/rprotobuf')
-  req <- ocpu(path, handle)
-  bail_if(!length(req$location), "response did not contain a location!")
-  req2 <- ocpu_perform(url_path(req$location, "R", ".val", "pb"))
-  unserialize_pb(req2$content)
 }
 
 #' @export
@@ -91,4 +77,18 @@ ocpu_post_multipart <- function(path, args = NULL){
   bail_if(!length(req$location), "response did not contain a location!")
   req2 <- ocpu_perform(url_path(req$location, "R", ".val", "rds"))
   readRDS(gzcon(rawConnection(req2$content)))
+}
+
+#' @export
+#' @rdname ocpu
+#' @param args a named list with function arguments, c.f. [do.call()]
+#' @examples # Note server might send cached responses
+#' ocpu_post_pb('/library/stats/R/rnorm', list(n = 5, mean = 3))
+ocpu_post_pb <- function(path, args = NULL){
+  handle <- new_handle(postfields = protolite::serialize_pb(args))
+  handle_setheaders(handle, 'Content-Type' = 'application/rprotobuf')
+  req <- ocpu(path, handle)
+  bail_if(!length(req$location), "response did not contain a location!")
+  req2 <- ocpu_perform(url_path(req$location, "R", ".val", "pb"))
+  unserialize_pb(req2$content)
 }

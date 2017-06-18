@@ -2,21 +2,21 @@
 % Please edit documentation in R/ocpu.R
 \name{ocpu}
 \alias{ocpu}
-\alias{ocpu_post_pb}
 \alias{ocpu_post_json}
 \alias{ocpu_post_encoded}
 \alias{ocpu_post_multipart}
+\alias{ocpu_post_pb}
 \title{OpenCPU API}
 \usage{
 ocpu(path, handle = NULL, server = "https://cloud.opencpu.org/ocpu")
-
-ocpu_post_pb(path, args = NULL)
 
 ocpu_post_json(path, args = NULL)
 
 ocpu_post_encoded(path, args = NULL)
 
 ocpu_post_multipart(path, args = NULL)
+
+ocpu_post_pb(path, args = NULL)
 }
 \arguments{
 \item{path}{target api (without the \code{/ocpu} part)}
@@ -31,9 +31,9 @@ ocpu_post_multipart(path, args = NULL)
 Calls an R function or script via the OpenCPU protocol and return output.
 }
 \examples{
-# Note server might send cached responses
-ocpu_post_pb('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_json('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_encoded('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_multipart('/library/stats/R/rnorm', list(n = 5, mean = 3))
+# Note server might send cached responses
+ocpu_post_pb('/library/stats/R/rnorm', list(n = 5, mean = 3))
 }

@@ -15,11 +15,10 @@ ocpu_options <- local({
   function(...){
     args <- list(...)
     for(i in seq_along(args)){
-      field <- names(args[i])
-      value <- args[[i]]
+      field <- tolower(names(args[i]))
       bail_if_not(length(field) && nchar(field), "Invalid name for option %d", i)
       bail_if_not(field %in% supported, "Unsupported curl option: %s", field)
-      OPTS[[field]] <<- value
+      OPTS[[field]] <<- args[[i]]
     }
     return(as.list(OPTS))
   }
