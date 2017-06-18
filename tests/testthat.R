@@ -1,4 +1,4 @@
 library(testthat)
 library(client)
 
-#test_check("client")
+test_check("client")

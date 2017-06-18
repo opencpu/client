@@ -11,7 +11,7 @@
 #' @importFrom protolite serialize_pb unserialize_pb
 #' @param path target api (without the `/ocpu` part)
 #' @param handle a curl handle to pass custom options and headers
-#' @param server base URL to OpenCPU
+#' @param server base URL to OpenCPU server
 ocpu <- function(path, handle = NULL, server = 'https://cloud.opencpu.org/ocpu'){
   url <- url_path(server, path)
   ocpu_perform(url, handle = handle)
@@ -35,7 +35,9 @@ ocpu_perform <- function(url, handle = new_handle(), stop_on_error = TRUE, no_ca
 
 #' @export
 #' @rdname ocpu
-#' @examples ocpu_post_json('/library/stats/R/rnorm', list(n = 5, mean = 3))
+#' @param args a named list with function arguments, c.f. [do.call()]
+#' @examples # Note that server might send cached responses
+#' ocpu_post_json('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_json <- function(path, args = NULL){
   handle <- new_handle(copypostfields = jsonlite::toJSON(args))
   handle_setheaders(handle, 'Content-Type' = 'application/json')
@@ -81,9 +83,7 @@ ocpu_post_multipart <- function(path, args = NULL){
 
 #' @export
 #' @rdname ocpu
-#' @param args a named list with function arguments, c.f. [do.call()]
-#' @examples # Note server might send cached responses
-#' ocpu_post_pb('/library/stats/R/rnorm', list(n = 5, mean = 3))
+#' @examples ocpu_post_pb('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_pb <- function(path, args = NULL){
   handle <- new_handle(copypostfields = protolite::serialize_pb(args))
   handle_setheaders(handle, 'Content-Type' = 'application/rprotobuf')
@@ -91,4 +91,16 @@ ocpu_post_pb <- function(path, args = NULL){
   bail_if(!length(req$location), "response did not contain a location!")
   req2 <- ocpu_perform(url_path(req$location, "R", ".val", "pb"))
   unserialize_pb(req2$content)
+}
+
+#' @export
+#' @rdname ocpu
+#' @examples ocpu_post_rds('/library/stats/R/rnorm', list(n = 5, mean = 3))
+ocpu_post_rds <- function(path, args = NULL){
+  handle <- new_handle(copypostfields = serialize(args, NULL))
+  handle_setheaders(handle, 'Content-Type' = 'application/rds')
+  req <- ocpu(path, handle)
+  bail_if(!length(req$location), "response did not contain a location!")
+  req2 <- ocpu_perform(url_path(req$location, "R", ".val", "rds"))
+  readRDS(gzcon(rawConnection(req2$content)))
 }

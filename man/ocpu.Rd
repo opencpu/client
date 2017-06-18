@@ -6,6 +6,7 @@
 \alias{ocpu_post_encoded}
 \alias{ocpu_post_multipart}
 \alias{ocpu_post_pb}
+\alias{ocpu_post_rds}
 \title{OpenCPU API}
 \usage{
 ocpu(path, handle = NULL, server = "https://cloud.opencpu.org/ocpu")
@@ -17,13 +18,15 @@ ocpu_post_encoded(path, args = NULL)
 ocpu_post_multipart(path, args = NULL)
 
 ocpu_post_pb(path, args = NULL)
+
+ocpu_post_rds(path, args = NULL)
 }
 \arguments{
 \item{path}{target api (without the \code{/ocpu} part)}
 
 \item{handle}{a curl handle to pass custom options and headers}
 
-\item{server}{base URL to OpenCPU}
+\item{server}{base URL to OpenCPU server}
 
 \item{args}{a named list with function arguments, c.f. \code{\link[=do.call]{do.call()}}}
 }
@@ -31,9 +34,10 @@ ocpu_post_pb(path, args = NULL)
 Calls an R function or script via the OpenCPU protocol and return output.
 }
 \examples{
+# Note that server might send cached responses
 ocpu_post_json('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_encoded('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_multipart('/library/stats/R/rnorm', list(n = 5, mean = 3))
-# Note server might send cached responses
 ocpu_post_pb('/library/stats/R/rnorm', list(n = 5, mean = 3))
+ocpu_post_rds('/library/stats/R/rnorm', list(n = 5, mean = 3))
 }
