@@ -1,0 +1,17 @@
+Package: client
+Type: Package
+Title: Client for OpenCPU 2.0
+Version: 0.1
+Description: R client for OpenCPU 2.0. One purpose of this package is to 
+  demonstrate and test the OpenCPU api.
+Author: Jeroen Ooms
+Maintainer: Jeroen Ooms <jeroen@berkeley.edu>
+License: Apache License 2.0
+Suggests: testthat
+Imports: 
+  curl (>= 2.6.9000),
+  jsonlite,
+  protolite
+RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
+Remotes: jeroen/curl
