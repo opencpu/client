@@ -4,7 +4,7 @@ test_that("Primitives and code", {
   # Quoting arguments in I() will post literal expressions
   x <- "sqrt(pi)"
   y <- "iris"
-  z <- jsonlite::toJSON(mtcars)
+  z <- as.character(jsonlite::toJSON(mtcars))
   out1 <- ocpu_post_encoded('/library/base/R/list', list(x = I(x), y = I(y), z = I(z)))
   expect_identical(out1$x, sqrt(pi))
   expect_identical(out1$y, iris)

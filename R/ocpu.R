@@ -54,7 +54,7 @@ ocpu_post_encoded <- function(path, args = NULL){
   fields <- names(args)
   values <- vapply(args, function(x){
     if(!inherits(x, "AsIs"))
-      x <- deparse(x)
+      x <- deparse_atomic(x)
     curl::curl_escape(x)
   }, character(1))
   data <- paste(fields, values, sep = "=", collapse = "&")
@@ -73,7 +73,7 @@ ocpu_post_multipart <- function(path, args = NULL){
     if(inherits(x, c("form_file", "form_data", "AsIs")))
       return(x)
     if(is.atomic(x))
-      return(deparse(x)) # curl forms automatically escape
+      return(deparse_atomic(x)) # curl forms automatically escape
     curl::form_data(serialize(x, NULL), "application/rds")
   })
   handle <- handle_setform(new_handle(), .list = values)
@@ -105,4 +105,11 @@ ocpu_post_rds <- function(path, args = NULL){
   bail_if(!length(req$location), "response did not contain a location!")
   req2 <- ocpu_perform(url_path(req$location, "R", ".val", "rds"))
   readRDS(gzcon(rawConnection(req2$content)))
+}
+
+deparse_atomic <- function(x){
+  if(is.character(x))
+    as.character(jsonlite::toJSON(x, auto_unbox = TRUE))
+  else
+    deparse(x)
 }
