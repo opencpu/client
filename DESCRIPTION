@@ -7,6 +7,7 @@ Description: R client for OpenCPU 2.0. One purpose of this package is to
 Author: Jeroen Ooms
 Maintainer: Jeroen Ooms <jeroen@berkeley.edu>
 License: Apache License 2.0
+Encoding: UTF-8
 Suggests: testthat
 Imports: 
   curl (>= 2.6.9000),

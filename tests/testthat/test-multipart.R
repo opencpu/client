@@ -28,7 +28,6 @@ test_that("Primitives and code", {
   expect_identical(out4$z, z)
 })
 
-
 test_that("File Uploads", {
   tmp <- tempfile(fileext = ".csv")
   on.exit(unlink(tmp))
