@@ -53,7 +53,9 @@ ocpu_post_json <- function(path, args = NULL){
 ocpu_post_encoded <- function(path, args = NULL){
   fields <- names(args)
   values <- vapply(args, function(x){
-    curl::curl_escape(deparse(x))
+    if(!inherits(x, "AsIs"))
+      x <- deparse(x)
+    curl::curl_escape(x)
   }, character(1))
   data <- paste(fields, values, sep = "=", collapse = "&")
   handle <- new_handle(copypostfields = data)
@@ -68,10 +70,10 @@ ocpu_post_encoded <- function(path, args = NULL){
 #' @examples ocpu_post_multipart('/library/stats/R/rnorm', list(n = 5, mean = 3))
 ocpu_post_multipart <- function(path, args = NULL){
   values <- lapply(args, function(x){
-    if(inherits(x, c("form_file", "form_data")))
+    if(inherits(x, c("form_file", "form_data", "AsIs")))
       return(x)
     if(is.atomic(x))
-      return(curl::curl_escape(deparse(x)))
+      return(deparse(x)) # curl forms automatically escape
     curl::form_data(serialize(x, NULL), "application/rds")
   })
   handle <- handle_setform(new_handle(), .list = values)
