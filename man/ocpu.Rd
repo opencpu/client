@@ -2,6 +2,7 @@
 % Please edit documentation in R/ocpu.R
 \name{ocpu}
 \alias{ocpu}
+\alias{ocpu_server}
 \alias{ocpu_post_json}
 \alias{ocpu_post_encoded}
 \alias{ocpu_post_multipart}
@@ -9,7 +10,9 @@
 \alias{ocpu_post_rds}
 \title{OpenCPU API}
 \usage{
-ocpu(path, handle = NULL, server = "https://cloud.opencpu.org/ocpu")
+ocpu(path, handle = NULL, server = ocpu_server())
+
+ocpu_server(server = NULL)
 
 ocpu_post_json(path, args = NULL)
 

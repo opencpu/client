@@ -12,10 +12,23 @@
 #' @param path target api (without the `/ocpu` part)
 #' @param handle a curl handle to pass custom options and headers
 #' @param server base URL to OpenCPU server
-ocpu <- function(path, handle = NULL, server = 'https://cloud.opencpu.org/ocpu'){
+ocpu <- function(path, handle = NULL, server = ocpu_server()){
   url <- url_path(server, path)
   ocpu_perform(url, handle = handle)
 }
+
+#' @export
+#' @rdname ocpu
+ocpu_server <- local({
+  SERVER <- Sys.getenv("OCPU_SERVER", "https://cloud.opencpu.org/ocpu")
+  function(server = NULL){
+    if(length(server)){
+      bail_if_not(grepl("https?://", server), "Does not look like URL: %s", server)
+      SERVER <<- server
+    }
+    return(SERVER)
+  }
+})
 
 ocpu_perform <- function(url, handle = new_handle(), stop_on_error = TRUE, no_cache = TRUE){
   handle <- handle_setopt(handle, .list = ocpu_options())
