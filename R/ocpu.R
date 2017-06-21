@@ -124,5 +124,5 @@ deparse_atomic <- function(x){
   if(is.character(x))
     as.character(jsonlite::toJSON(x, auto_unbox = TRUE))
   else
-    deparse(x)
+    paste(deparse(x), collapse = "\n")
 }

@@ -13,7 +13,7 @@ test_that("String encodings", {
 
   # Roundtrip string objects
   expect_equal(ocpu_post_multipart('/library/base/R/identity', list(x = obj_utf8)), obj_utf8)
-  expect_equal(ocpu_post_encoded('/library/base/R/identity', list(x = obj_utf8)), obj_utf8)
+  expect_equal(ocpu_post_encoded('/library/base/R/identity', list(x = strings)), strings)
   expect_equal(ocpu_post_json('/library/base/R/identity', list(x = obj_utf8)), obj_utf8)
   expect_equal(ocpu_post_rds('/library/base/R/identity', list(x = obj_utf8)), obj_utf8)
   expect_equal(ocpu_post_pb('/library/base/R/identity', list(x = obj_utf8)), obj_utf8)
