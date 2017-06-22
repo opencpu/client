@@ -28,6 +28,14 @@ test_that("String encodings", {
   expect_identical(res, obj_utf8)
   expect_identical(sapply(res, Encoding), sapply(obj_utf8, Encoding))
 
+  # Strings as arguments (expressions)
+  # enc <- Encoding(strings)
+  # expect_identical(ocpu_post_multipart('/library/base/R/Encoding', list(x = strings)), enc)
+  # expect_identical(ocpu_post_encoded('/library/base/R/Encoding', list(x = strings)), enc)
+  # expect_identical(ocpu_post_json('/library/base/R/Encoding', list(x = strings)), enc)
+  # expect_identical(ocpu_post_rds('/library/base/R/Encoding', list(x = strings)), enc)
+  # expect_identical(ocpu_post_pb('/library/base/R/Encoding', list(x = strings)), enc)
+
   # Test all native strings (usualy only on Windows)
   #obj_native <- structure(as.list(enc2native(strings)), names = letters[seq_along(strings)])
   #expect_equal(ocpu_post_multipart('/library/base/R/list', obj_native), obj_utf8)

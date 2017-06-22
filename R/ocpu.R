@@ -121,8 +121,11 @@ ocpu_post_rds <- function(path, args = NULL){
 }
 
 deparse_atomic <- function(x){
-  if(is.character(x))
-    as.character(jsonlite::toJSON(x, auto_unbox = TRUE))
-  else
+  if(is.character(x)){
+    str <- jsonlite::toJSON(x)
+    str <- sub("^\\[", "c(", str)
+    sub("\\]$", ")", str)
+  } else {
     paste(deparse(x), collapse = "\n")
+  }
 }
