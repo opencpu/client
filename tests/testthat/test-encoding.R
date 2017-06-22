@@ -38,10 +38,11 @@ test_that("String encodings", {
 
   # Get version of evaluate
   evaluate_version <- ocpu_post_pb('/library/utils/R/packageVersion', list(pkg = 'evaluate'))
+  webutils_version <- ocpu_post_pb('/library/utils/R/packageVersion', list(pkg = 'webutils'))
 
   # Test all native strings (usualy only on Windows)
-  skip_if_not(evaluate_version >= "0.10.1")
-  obj_native <- structure(as.list(enc2native(strings)), names = letters[seq_along(strings)])
+  skip_if_not(evaluate_version >= "0.10.1" && webutils_version >= "0.6")
+  obj_native <- structure(as.list(enc2utf8(strings)), names = letters[seq_along(strings)])
   expect_equal(ocpu_post_multipart('/library/base/R/list', obj_native), obj_utf8)
   expect_equal(ocpu_post_encoded('/library/base/R/list', obj_native), obj_utf8)
   expect_equal(ocpu_post_json('/library/base/R/list', obj_native), obj_utf8)
