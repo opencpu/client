@@ -9,32 +9,19 @@ test_that("String encodings", {
     rawToChar(as.raw(1:40)),
     "?foo&bar=baz!bla\n"
   )
-  obj_utf8 <- structure(as.list(enc2utf8(strings)), names = letters[seq_along(strings)])
+  obj <- structure(as.list(strings), names = letters[seq_along(strings)])
 
   # Roundtrip string objects
-  res <- ocpu_post_multipart('/library/base/R/identity', list(x = obj_utf8))
-  expect_identical(res, obj_utf8)
-  expect_identical(sapply(res, Encoding), sapply(obj_utf8, Encoding))
-  res <- ocpu_post_multipart('/library/base/R/identity', list(x = obj_utf8))
-  expect_identical(res, obj_utf8)
-  expect_identical(sapply(res, Encoding), sapply(obj_utf8, Encoding))
-  res <- ocpu_post_json('/library/base/R/identity', list(x = obj_utf8))
-  expect_identical(res, obj_utf8)
-  expect_identical(sapply(res, Encoding), sapply(obj_utf8, Encoding))
-  res <- ocpu_post_rds('/library/base/R/identity', list(x = obj_utf8))
-  expect_identical(res, obj_utf8)
-  expect_identical(sapply(res, Encoding), sapply(obj_utf8, Encoding))
-  res <- ocpu_post_pb('/library/base/R/identity', list(x = obj_utf8))
-  expect_identical(res, obj_utf8)
-  expect_identical(sapply(res, Encoding), sapply(obj_utf8, Encoding))
-
-  # Strings as arguments (expressions)
-  # enc <- Encoding(strings)
-  # expect_identical(ocpu_post_multipart('/library/base/R/Encoding', list(x = strings)), enc)
-  # expect_identical(ocpu_post_encoded('/library/base/R/Encoding', list(x = strings)), enc)
-  # expect_identical(ocpu_post_json('/library/base/R/Encoding', list(x = strings)), enc)
-  # expect_identical(ocpu_post_rds('/library/base/R/Encoding', list(x = strings)), enc)
-  # expect_identical(ocpu_post_pb('/library/base/R/Encoding', list(x = strings)), enc)
+  res <- ocpu_post_multipart('/library/base/R/identity', list(x = obj))
+  expect_identical(res, obj)
+  res <- ocpu_post_multipart('/library/base/R/identity', list(x = obj))
+  expect_identical(res, obj)
+  res <- ocpu_post_json('/library/base/R/identity', list(x = obj))
+  expect_identical(res, obj)
+  res <- ocpu_post_rds('/library/base/R/identity', list(x = obj))
+  expect_identical(res, obj)
+  res <- ocpu_post_pb('/library/base/R/identity', list(x = obj))
+  expect_identical(res, obj)
 
   # Get version of evaluate
   evaluate_version <- ocpu_post_pb('/library/utils/R/packageVersion', list(pkg = 'evaluate'))
@@ -42,10 +29,14 @@ test_that("String encodings", {
 
   # Test all native strings (usualy only on Windows)
   skip_if_not(evaluate_version >= "0.10.1" && webutils_version >= "0.6")
-  obj_native <- structure(as.list(enc2utf8(strings)), names = letters[seq_along(strings)])
-  expect_equal(ocpu_post_multipart('/library/base/R/list', obj_native), obj_utf8)
-  expect_equal(ocpu_post_encoded('/library/base/R/list', obj_native), obj_utf8)
-  expect_equal(ocpu_post_json('/library/base/R/list', obj_native), obj_utf8)
-  expect_equal(ocpu_post_rds('/library/base/R/list', obj_native), obj_utf8)
-  expect_equal(ocpu_post_pb('/library/base/R/list', obj_native), obj_utf8)
+  expect_equal(ocpu_post_multipart('/library/base/R/list', obj), obj)
+  expect_equal(ocpu_post_encoded('/library/base/R/list', obj), obj)
+  expect_equal(ocpu_post_json('/library/base/R/list', obj), obj)
+  expect_equal(ocpu_post_pb('/library/base/R/list', obj), obj)
+
+  # Do not serialize non-utf8 on Windows
+  obj_utf8 <- structure(as.list(enc2utf8(strings)), names = letters[seq_along(strings)])
+  expect_equal(ocpu_post_rds('/library/base/R/list', obj_utf8), obj_utf8)
+
+
 })
