@@ -8,7 +8,7 @@ test_that("Server UTF-8 support", {
   expect_equal(len, c(6, 5, 6, 2, 40, 17))
 
   # Compare to original
-  strings <- opencpu::strings
+  strings <- unserialize(ocpu('/library/opencpu/data/strings/rds')$content)
   expect_identical(strings, data)
 
   # Objects do not get deparsed and end up in the call
