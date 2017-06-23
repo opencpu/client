@@ -14,17 +14,19 @@ test_that("Server UTF-8 support", {
   # Objects do not get deparsed and end up in the call
   obj <- structure(as.list(strings), names = letters[seq_along(strings)])
 
-  # Roundtrip string objects
-  res <- ocpu_post_multipart('/library/base/R/identity', list(x = obj))
-  expect_identical(res, obj)
-  res <- ocpu_post_encoded('/library/base/R/identity', list(x = obj))
-  expect_identical(res, obj)
-  res <- ocpu_post_json('/library/base/R/identity', list(x = obj))
-  expect_identical(res, obj)
-  res <- ocpu_post_rds('/library/base/R/identity', list(x = obj))
-  expect_identical(res, obj)
-  res <- ocpu_post_pb('/library/base/R/identity', list(x = obj))
-  expect_identical(res, obj)
+  # Roundtrip atomic
+  expect_identical(ocpu_post_multipart('/library/base/R/identity', list(x = strings)), strings)
+  expect_identical(ocpu_post_encoded('/library/base/R/identity', list(x = strings)), strings)
+  expect_identical(ocpu_post_json('/library/base/R/identity', list(x = strings)), strings)
+  expect_identical(ocpu_post_rds('/library/base/R/identity', list(x = strings)), strings)
+  expect_identical(ocpu_post_pb('/library/base/R/identity', list(x = strings)), strings)
+
+  # Roundtrip objects
+  expect_identical(ocpu_post_multipart('/library/base/R/identity', list(x = obj)), obj)
+  expect_identical(ocpu_post_encoded('/library/base/R/identity', list(x = obj)), obj)
+  expect_identical(ocpu_post_json('/library/base/R/identity', list(x = obj)), obj)
+  expect_identical(ocpu_post_rds('/library/base/R/identity', list(x = obj)), obj)
+  expect_identical(ocpu_post_pb('/library/base/R/identity', list(x = obj)), obj)
 
   # Get version of evaluate
   evaluate_version <- ocpu_post_pb('/library/utils/R/packageVersion', list(pkg = 'evaluate'))
@@ -35,11 +37,7 @@ test_that("Server UTF-8 support", {
   expect_equal(ocpu_post_multipart('/library/base/R/list', obj), obj)
   expect_equal(ocpu_post_encoded('/library/base/R/list', obj), obj)
   expect_equal(ocpu_post_json('/library/base/R/list', obj), obj)
+  expect_equal(ocpu_post_rds('/library/base/R/list', obj), obj)
   expect_equal(ocpu_post_pb('/library/base/R/list', obj), obj)
-
-  # Do not serialize non-utf8 on Windows
-  obj_utf8 <- structure(as.list(enc2utf8(strings)), names = letters[seq_along(strings)])
-  expect_equal(ocpu_post_rds('/library/base/R/list', obj_utf8), obj_utf8)
-
 
 })
