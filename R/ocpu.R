@@ -12,7 +12,7 @@
 #' @param path target api (without the `/ocpu` part)
 #' @param handle a curl handle to pass custom options and headers
 #' @param server base URL to OpenCPU server
-ocpu <- function(path, handle = NULL, server = ocpu_server()){
+ocpu <- function(path, handle = new_handle(), server = ocpu_server()){
   url <- url_path(server, path)
   ocpu_perform(url, handle = handle)
 }
