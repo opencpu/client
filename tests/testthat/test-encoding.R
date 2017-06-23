@@ -1,6 +1,10 @@
 context("encodings")
 
 test_that("String encodings", {
+  # Get strings from server
+  data <- jsonlite::fromJSON(rawToChar(ocpu('/library/opencpu/data/strings/json')$content))
+
+  # Local strings
   strings <- c(
     "Zürich",
     "北京填鴨们",
@@ -9,6 +13,11 @@ test_that("String encodings", {
     rawToChar(as.raw(1:40)),
     "?foo&bar=baz!bla\n"
   )
+
+  #pretest
+  expect_equal(data, strings)
+
+  # Objects do not get deparsed and end up in the call
   obj <- structure(as.list(strings), names = letters[seq_along(strings)])
 
   # Roundtrip string objects
