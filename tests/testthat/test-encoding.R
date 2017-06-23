@@ -11,6 +11,9 @@ test_that("Server UTF-8 support", {
   strings <- unserialize(ocpu('/library/opencpu/data/strings/rds')$content)
   expect_identical(strings, data)
 
+  # Also test latin1 on Windows
+  strings[1] <- enc2native(strings[1])
+
   # Objects do not get deparsed and end up in the call
   obj <- structure(as.list(strings), names = letters[seq_along(strings)])
 
