@@ -14,7 +14,7 @@ test_that("String encodings", {
   # Roundtrip string objects
   res <- ocpu_post_multipart('/library/base/R/identity', list(x = obj))
   expect_identical(res, obj)
-  res <- ocpu_post_multipart('/library/base/R/identity', list(x = obj))
+  res <- ocpu_post_encoded('/library/base/R/identity', list(x = obj))
   expect_identical(res, obj)
   res <- ocpu_post_json('/library/base/R/identity', list(x = obj))
   expect_identical(res, obj)
