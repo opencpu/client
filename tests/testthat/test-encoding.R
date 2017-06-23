@@ -2,7 +2,7 @@ context("encodings")
 
 test_that("String encodings", {
   # Get strings from server
-  data <- jsonlite::fromJSON(rawToChar(ocpu('/library/opencpu/data/strings/json')$content))
+  data <- jsonlite::fromJSON(base::rawToChar(ocpu('/library/opencpu/data/strings/json')$content))
 
   # Local strings
   strings <- c(
