@@ -8,15 +8,14 @@ Author: Jeroen Ooms
 Maintainer: Jeroen Ooms <jeroen@berkeley.edu>
 License: Apache License 2.0
 Encoding: UTF-8
-Suggests: 
-  opencpu (>= 2.0.2.9000),
-  testthat
 Imports: 
+  opencpu (>= 2.0.2.9000),
   curl (>= 2.6.9000),
   jsonlite,
   protolite
+Suggests: 
+  testthat
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)
-Remotes: 
-  jeroen/curl, 
+Remotes: jeroen/curl, 
   opencpu/opencpu
