@@ -10,7 +10,8 @@
 \alias{ocpu_post_rds}
 \title{OpenCPU API}
 \usage{
-ocpu(path, handle = new_handle(), server = ocpu_server())
+ocpu(path, handle = new_handle(), server = ocpu_server(),
+  stop_on_error = TRUE)
 
 ocpu_server(server = NULL)
 
