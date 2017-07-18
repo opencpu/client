@@ -1,4 +1,4 @@
-context("Java")
+context("External: Java")
 
 test_that("Use read xlsx works",{
   # Check if server has xlsx
